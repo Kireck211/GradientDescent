@@ -43,10 +43,17 @@ function normalize_y(value) {
 }
 
 function get_extreme_points(b, m) {
-	var function_calc = function (m, x, b) {
-		return m * x + b;
+	/*
+		x = (y - b) / m
+	*/
+	var function_calc = function (y) {
+		return (y - b) / m;
 	}
-	return [0, normalize_y(function_calc(m, 0, b)), SIZE, normalize_y(function_calc(m, SIZE, b))];
+	var y1 = 0;
+	var x1 = function_calc(y1);
+	var y2 = 600;
+	var x2 = function_calc(y2);
+	return [normalize_x(x1), normalize_y(y1), normalize_x(x2), normalize_y(y2)];
 }
 
 function init_drawing(data) {
@@ -69,9 +76,8 @@ function init_drawing(data) {
 
 	for(var i = 0; i < entries.length; i++) {
 		var x_y = entries[i].slice(0);
-		var x_y2 = entries[i].slice(0);
-		x_y[0] = normalize_x(x_y2[0]);
-		x_y[1] = normalize_y(x_y2[1]);
+		x_y[0] = normalize_x(x_y[0]);
+		x_y[1] = normalize_y(x_y[1]);
 		ellipse(x_y[0], x_y[1], 2, 2);
 	}
 
@@ -83,7 +89,7 @@ function gdb() {
 	b = values[0];
 	m = values[1];
 	// change values of b and m from index
-	values = get_extreme_points(b, m)
+	values = get_extreme_points(b, m);
 	line(values[0], values[1], values[2], values[3]);
 }
 
@@ -106,7 +112,7 @@ function setup() {
 }
 
 function draw() {
-	if (ready) {
+	if (ready && iterations > 0) {
 		gdb();
 		iterations--;
 	}
