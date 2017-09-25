@@ -9,6 +9,7 @@ var min_value_x = 1000000, min_value_y = 1000000;
 var max_value_x = -1, max_value_y = -1;
 var ready = false;
 
+
 function squared_min_difference(b, m, points) {
 	var total_error = 0;
 	for (var i = 0; i < points.length; i++) {
@@ -19,6 +20,7 @@ function squared_min_difference(b, m, points) {
 	return total_error / (points.length).toFixed(0);
 }
 
+//Calculates the new Theta0 and Theta1 from the actual values
 function step_gradient(current_b, current_m, points, learning_rate) {
 	var gradient_b = 0;
 	var gradient_m = 0;
@@ -56,6 +58,7 @@ function get_extreme_points(b, m) {
 	return [normalize_x(x1), normalize_y(y1), normalize_x(x2), normalize_y(y2)];
 }
 
+//Obtains the initial positions for the dataset points and draws them
 function init_drawing(data) {
 	var all_text_lines = data.split(/\r\n|\n/);
 	var entries = [];
@@ -84,6 +87,7 @@ function init_drawing(data) {
 	return entries;
 }
 
+//Redraws the dataset points
 function draw_points(points)
 {
 	for(var i = 0; i < points.length; i++) {
@@ -94,6 +98,7 @@ function draw_points(points)
 	}
 }
 
+//Calculates values of Theta0 and Theta1 and draws the function line
 function gdb() {
 	console.log("------");
 	console.log(m);
@@ -106,6 +111,7 @@ function gdb() {
 	line(values[0], values[1], values[2], values[3]);
 }
 
+//Loads the dataset from file and initializes the points in canvas
 function start_gradient() {
 	$.ajax({
 		type: 'GET',
@@ -130,7 +136,7 @@ function setup() {
 function draw() {
 	background('#C0C0C0');
 	draw_points(points);
-	
+
 	if (ready && iterations > 0) {
 		gdb();
 		iterations--;
