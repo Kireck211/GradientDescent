@@ -2,13 +2,16 @@ var SIZE = 600;
 var b = 0;
 var m = 0;
 var learning_rate = 0.0001;
+var epsilon = 0.01;
 var points = [];
 var iterations = 1000;
 var canvas;
 var min_value_x = 1000000, min_value_y = 1000000;
 var max_value_x = -1, max_value_y = -1;
 var ready = false;
-
+var perror;
+var aerror;
+var converge = false;
 
 function squared_min_difference(b, m, points) {
 	var total_error = 0;
@@ -103,12 +106,21 @@ function gdb() {
 	console.log("------");
 	console.log(m);
 	console.log(b);
+
 	var values = step_gradient(b, m, points, learning_rate);
+	
 	b = values[0];
 	m = values[1];
 	// change values of b and m from index
 	values = get_extreme_points(b, m);
 	line(values[0], values[1], values[2], values[3]);
+
+	//Convergence check
+	aerror = squared_min_difference(b,m,points);
+
+	if(Math.abs(perror - aerror) <= epsilon)
+		converge = true;
+
 }
 
 //Loads the dataset from file and initializes the points in canvas
@@ -136,10 +148,16 @@ function setup() {
 function draw() {
 	background('#C0C0C0');
 	draw_points(points);
+	perror = squared_min_difference(b, m, points);
 
 	if (ready && iterations > 0) {
 		gdb();
 		iterations--;
+	}
+
+	if(converge)
+	{
+		noLoop();
 	}
 
 
