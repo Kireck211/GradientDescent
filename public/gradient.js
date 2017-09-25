@@ -112,6 +112,8 @@ function gdb() {
 	b = values[0];
 	m = values[1];
 	// change values of b and m from index
+	$('span.b').html(b.toFixed(2));
+	$('span.m').html(m.toFixed(2));
 	values = get_extreme_points(b, m);
 	line(values[0], values[1], values[2], values[3]);
 
@@ -159,7 +161,4 @@ function draw() {
 	{
 		noLoop();
 	}
-
-
-
 }
