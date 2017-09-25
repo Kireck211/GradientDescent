@@ -1,7 +1,7 @@
 var SIZE = 600;
 var b = 0;
 var m = 0;
-var learning_rate = 0.01;
+var learning_rate = 0.0001;
 var points = [];
 var iterations = 1000;
 var canvas;
@@ -84,7 +84,20 @@ function init_drawing(data) {
 	return entries;
 }
 
+function draw_points(points)
+{
+	for(var i = 0; i < points.length; i++) {
+		var x_y = points[i].slice(0);
+		x_y[0] = normalize_x(x_y[0]);
+		x_y[1] = normalize_y(x_y[1]);
+		ellipse(x_y[0], x_y[1], 2, 2);
+	}
+}
+
 function gdb() {
+	console.log("------");
+	console.log(m);
+	console.log(b);
 	var values = step_gradient(b, m, points, learning_rate);
 	b = values[0];
 	m = values[1];
@@ -99,6 +112,7 @@ function start_gradient() {
 		url: '/static/hours_score.csv',
 		datatype: "text"
 	}).done(function (data) {
+		dataset = data;	
 		points = init_drawing(data);
 		ready = true;
 	});
@@ -108,12 +122,20 @@ function setup() {
 	canvas = createCanvas(SIZE, SIZE);
 	canvas.parent('data-holder');
 	background('#C0C0C0');
+	frameRate(5);
 	start_gradient();
+	loop();
 }
 
 function draw() {
+	background('#C0C0C0');
+	draw_points(points);
+	
 	if (ready && iterations > 0) {
 		gdb();
 		iterations--;
 	}
+
+
+
 }
